@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <title>Calculator Project</title>
+    </head>
+    <body>
+        <h1>Calculator</h1>
+        <h4>It caculates things</h4>
+        <div id="calculator">
+            <div id="calcScreen">
+
+            </div>
+            <div class="calcNumbers">
+                <span id="calcBackground"></span>
+                <span id="calcDisplay">0</span>
+                <span class="calcNumber calcRow1" id="7">7</span c>
+                <span class="calcNumber calcRow1 calcColumn" id="8">8</span>
+                <span class="calcNumber calcRow1 calcColumn" id="9">9</span>
+                <span class="calcNumber calcOperator calcRow1 calcColumn" id="+">+</span>
+                <span class="calcNumber calcOperator calcRow1" id="deleteOperator">⌫</span>
+                <span class="calcNumber calcRow2" id="4">4</span>
+                <span class="calcNumber calcRow2 calcColumn" id="5">5</span>
+                <span class="calcNumber calcRow2 calcColumn" id="6">6</span>
+                <span class="calcNumber calcOperator calcRow2 calcColumn" id="-">-</span>
+                <span class="calcNumber calcOperator calcRow2 calcColumn" id="C">C</span>
+                <span class="calcNumber calcRow3" id="1">1</span>
+                <span class="calcNumber calcRow3 calcColumn" id="2">2</span>
+                <span class="calcNumber calcRow3 calcColumn" id="3">3</span>
+                <span class="calcNumber calcOperator calcRow3 calcColumn" id="x">x</span>
+                <span class="calcNumber calcOperator calcRow3" id="CE">CE</span>
+                <span class="calcNumber calcRow4"id="+/-">+/-</span>
+                <span class="calcNumber calcRow4 calcColumn" id="0">0</span>
+                <span class="calcNumber calcRow4 calcColumn" id=".">.</span>
+                <span class="calcNumber calcOperator calcRow4 calcColumn" id="÷">÷</span>
+                <span class="calcNumber calcRow4" id="equalsOperator" id="=">=</span>
+            </div>
+        </div>
+    </body>
+    <script>
+        const BUTTONS = document.getElementsByClassName("calcNumber");
+        let display = document.getElementById("calcDisplay");
+        let background = document.getElementById("calcBackground");
+        Array.from(BUTTONS).forEach(button => button.addEventListener("click", clickButton));
+        let operatorCheck = 0;
+        let calcNums = [];
+        let currentNum = "";
+        function clickButton() {
+            const ID = this.id;
+            switch (ID) {
+                case ("1"):
+                case ("2"):
+                case ("3"):
+                case ("4"):
+                case ("5"):
+                case ("6"):
+                case ("8"):
+                case ("9"):
+                case ("0"):
+                case ("."): 
+                    currentNum += ID;
+                    display.innerHTML = currentNum;
+                    break;
+                case ("+"):
+                    operatorCheck = 1;
+                    calcNums.push(currentNum);
+                    currentNum = "";
+                    executeOperator(ID);
+                    break;
+                case ("-"):
+                    operatorCheck = 2;
+                    calcNums.push(currentNum);
+                    currentNum = "";
+                    executeOperator(ID);
+                    break; 
+                case ("x"):
+                    operatorCheck = 3;
+                    calcNums.push(currentNum);
+                    currentNum = "";
+                    executeOperator(ID);
+                    break; 
+                case ("÷"):
+                    operatorCheck = 4;
+                    calcNums.push(currentNum);
+                    currentNum = "";
+                    executeOperator(ID);
+                    break; 
+                case ("equalsOperator"):
+                    calcNums.push(currentNum);
+                    currentNum = "";
+                    if (calcNums.length === 2) {
+                        calcNums = [mathResults(operatorCheck)];
+                        background.innerHTML = "";
+                        display.innerHTML = calcNums[0];
+                    } 
+                    break; 
+                case ("deleteOperator"):
+                    if (currentNum.length > 1) {    
+                        currentNum = currentNum.slice(0, currentNum.length-1);
+                    } else {
+                        currentNum = "";
+                    }
+                        display.innerHTML = currentNum;
+                    break;
+                case ("C"):
+                    currentNum = "";
+                    display.innerHTML = 0;
+                    break;
+                case ("CE"):
+                    currentNum = "";
+                    display.innerHTML = 0;
+                    calcNums = [];
+                    background.innerHTML = "";
+                    break;
+                case ("+/-"):
+                    if (currentNum[0] === "-") {
+                        currentNum = currentNum.slice(1, currentNum.length);
+                        display.innerHTML = currentNum;
+                    } else {
+                        currentNum = "-" + currentNum;
+                        display.innerHTML = currentNum;
+                    }
+                    break;
+            }
+        }
+        function mathResults (operator) {
+            let num = 0;
+            switch (operator) {
+                case 1:
+                    num = +calcNums[0] + +calcNums[1];
+                    break;
+                case 2:
+                    num = calcNums[0] - calcNums[1];
+                    break;
+                case 3:
+                    num = calcNums[0] * calcNums[1];
+                    break;
+                case 4:
+                    if (calcNums[1] <= 0) {
+                        throw new Error ("Cannot divide by zero")
+                    }
+                    num = calcNums[0] / calcNums[1];
+                    break;
+            }
+            operatorCheck = 0;
+            return num;
+        }
+        function executeOperator (id) {
+            if (calcNums.length === 2) {
+                calcNums = [mathResults(operatorCheck)];
+                background.innerHTML = calcNums[0];
+                display.innerHTML = 0;
+            } else if (calcNums.length === 1) {
+                background.innerHTML = `${calcNums[0]} ${id} `
+                display.innerHTML = 0;
+            }
+        }
+    </script>
+</html>
+

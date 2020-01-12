@@ -1,0 +1,99 @@
+body {
+    background-color: white;
+  }
+h1 {
+    text-align: center;
+}
+h4 {
+    text-align: center;
+}
+.calcNumbers {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 10px;
+    outline: 1px solid rgba(0,0,0,0.2);
+    justify-content: center;
+    width: 400px;
+    margin: auto;
+    background-color: lightgrey;
+}
+.calcBackground {
+position: absolute;
+top: 0;
+left: 0;
+bottom: 0;
+right: 0;
+z-index: -1;
+overflow: hidden;
+}
+.calcNumber{
+    padding: 20px;
+    font-size: 30px;
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    outline: 1px solid lightgrey;
+    background-color: rgba(0, 0, 0, 0.829);
+    color: white;
+}
+.calcNumber:hover {
+    background: rgba(59, 59, 59, 0.897);
+}
+.calcRow1{
+    grid-row: 2;
+}
+.calcRow2{
+    grid-row: 3;
+}
+.calcRow3{
+    grid-row: 4;
+}
+.calcRow4{
+    grid-row: 5;
+}
+.calcOperator {
+    background-color: rgb(141, 140, 140);
+}
+.calcOperator:hover {
+    background: rgb(104, 102, 102);
+}
+.calcColumn {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+#deleteOperator{
+    padding: 10px;
+    font-size: 40px;
+    text-align: center;    
+}
+#calcDisplay{
+    padding: 20px;
+    font-size: 30px;
+    text-align: right;
+    grid-column-start: 1;
+    grid-column-end: 6;
+    grid-row: 1;
+    place-self: right;
+    outline: 1px solid rgba(0,0,0,0.2);
+    outline-offset: -1px;
+    
+}
+#calcBackground{
+    padding: 8px;
+    font-size: 13px;
+    color: black;
+    text-align: right;
+    grid-column-start: 1;
+    grid-column-end: 6;
+    grid-row: 1;
+    place-self: right;
+    background-color: white;
+}
+#equalsOperator {
+    background-color: rgb(255, 199, 94);
+}
+#equalsOperator:hover {
+    background-color: orange;
+}
+
+
