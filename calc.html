@@ -45,6 +45,7 @@
         let operatorCheck = 0;
         let calcNums = [];
         let currentNum = "";
+        let thirdNum = "";
         function clickButton() {
             const ID = this.id;
             switch (ID) {
@@ -57,50 +58,60 @@
                 case ("8"):
                 case ("9"):
                 case ("0"):
-                case ("."): 
-                    currentNum += ID;
-                    display.innerHTML = currentNum;
+                case ("."):  
+                        currentNum += ID;
+                        display.innerHTML = currentNum;
+                        thirdNum = "";
                     break;
                 case ("+"):
-                    operatorCheck = 1;
-                    calcNums.push(currentNum);
-                    currentNum = "";
-                    executeOperator(ID);
+                    if (thirdNum.toString().length > 0) {
+                        calcNums.push(thirdNum);
+                        thirdNum = "";
+                    }
+                    console.log(calcNums);
+                    executeOperator(ID, 1);
                     break;
                 case ("-"):
-                    operatorCheck = 2;
-                    calcNums.push(currentNum);
-                    currentNum = "";
-                    executeOperator(ID);
+                    if (thirdNum.toString().length > 0) {
+                        calcNums.push(thirdNum);
+                        thirdNum = "";
+                    }
+                    executeOperator(ID, 2);
                     break; 
                 case ("x"):
-                    operatorCheck = 3;
-                    calcNums.push(currentNum);
-                    currentNum = "";
-                    executeOperator(ID);
+                    if (thirdNum.toString().length > 0) {
+                        calcNums.push(thirdNum);
+                        thirdNum = "";
+                    }
+                    executeOperator(ID, 3);
                     break; 
                 case ("÷"):
-                    operatorCheck = 4;
-                    calcNums.push(currentNum);
-                    currentNum = "";
-                    executeOperator(ID);
+                    if (thirdNum.toString().length > 0) {
+                        calcNums.push(thirdNum);
+                        thirdNum = "";
+                    }
+                    executeOperator(ID, 4);
                     break; 
                 case ("equalsOperator"):
-                    calcNums.push(currentNum);
-                    currentNum = "";
-                    if (calcNums.length === 2) {
-                        calcNums = [mathResults(operatorCheck)];
-                        background.innerHTML = "";
-                        display.innerHTML = calcNums[0];
-                    } 
+                    if (currentNum.length > 0) {
+                        calcNums.push(currentNum);
+                        currentNum = "";
+                        if (calcNums.length === 2) {
+                            thirdNum = mathResults(operatorCheck);
+                            calcNums = [];
+                            background.innerHTML = "";
+                            display.innerHTML = thirdNum;
+                        } 
+                    }
                     break; 
                 case ("deleteOperator"):
                     if (currentNum.length > 1) {    
                         currentNum = currentNum.slice(0, currentNum.length-1);
+                        display.innerHTML = currentNum;
                     } else {
                         currentNum = "";
+                        display.innerHTML = 0;
                     }
-                        display.innerHTML = currentNum;
                     break;
                 case ("C"):
                     currentNum = "";
@@ -111,6 +122,8 @@
                     display.innerHTML = 0;
                     calcNums = [];
                     background.innerHTML = "";
+                    thirdNum = "";
+                    operatorCheck = 0;
                     break;
                 case ("+/-"):
                     if (currentNum[0] === "-") {
@@ -145,14 +158,98 @@
             operatorCheck = 0;
             return num;
         }
-        function executeOperator (id) {
+        function executeOperator (id, check) {
+            if (currentNum.length > 0) {
+                calcNums.push(currentNum);
+                currentNum = "";
+            }
+            if (operatorCheck !== 0) {
+                console.log("opt1");
+                calcNums = [mathResults(operatorCheck)];
+                background.innerHTML = calcNums[0];
+            }
+                operatorCheck = check;
             if (calcNums.length === 2) {
+                console.log("opt2");
                 calcNums = [mathResults(operatorCheck)];
                 background.innerHTML = calcNums[0];
                 display.innerHTML = 0;
             } else if (calcNums.length === 1) {
                 background.innerHTML = `${calcNums[0]} ${id} `
                 display.innerHTML = 0;
+            } else if (calcNums.length === 0) {
+            }
+        }
+        window.addEventListener('keydown', keyDown);
+        function keyDown(e) {
+            console.log(e);
+            switch (e.key) {
+                case ("1"):
+                case ("2"):
+                case ("3"):
+                case ("4"):
+                case ("5"):
+                case ("6"):
+                case ("8"):
+                case ("9"):
+                case ("0"):
+                case ("."):  
+                    currentNum += e.key;
+                    display.innerHTML = currentNum;
+                    thirdNum = "";
+                    break;
+                case ("+"):
+                    if (thirdNum.toString().length > 0) {
+                        calcNums.push(thirdNum);
+                        thirdNum = "";
+                    }
+                    console.log(calcNums);
+                    executeOperator("+", 1);
+                    break;
+                case ("-"):
+                    if (thirdNum.toString().length > 0) {
+                        calcNums.push(thirdNum);
+                        thirdNum = "";
+                    }
+                    executeOperator("-", 2);
+                    break; 
+                case ("*"):
+                case ("x"):
+                    if (thirdNum.toString().length > 0) {
+                        calcNums.push(thirdNum);
+                        thirdNum = "";
+                    }
+                    executeOperator("x", 3);
+                    break; 
+                case ("/"):
+                    if (thirdNum.toString().length > 0) {
+                        calcNums.push(thirdNum);
+                        thirdNum = "";
+                    }
+                    executeOperator("÷", 4);
+                    break; 
+                case ("="):
+                case ("Enter"):
+                    if (currentNum.length > 0) {
+                        calcNums.push(currentNum);
+                        currentNum = "";
+                        if (calcNums.length === 2) {
+                            thirdNum = mathResults(operatorCheck);
+                            calcNums = [];
+                            background.innerHTML = "";
+                            display.innerHTML = thirdNum;
+                        } 
+                    }
+                    break; 
+                case ("Backspace"):
+                    if (currentNum.length > 1) {    
+                        currentNum = currentNum.slice(0, currentNum.length-1);
+                        display.innerHTML = currentNum;
+                    } else {
+                        currentNum = "";
+                        display.innerHTML = 0;
+                    }
+                    break;        
             }
         }
     </script>
