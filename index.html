@@ -43,11 +43,17 @@
         let background = document.getElementById("calcBackground");
         Array.from(BUTTONS).forEach(button => button.addEventListener("click", clickButton));
         let operatorCheck = 0;
+        let decimalCheck = false;
         let calcNums = [];
         let currentNum = "";
         let thirdNum = "";
-        function clickButton() {
-            const ID = this.id;
+        function clickButton(e) {
+            let ID = "";
+            if (e.key === undefined) {
+                ID = this.id;
+            } else {
+                ID = e.key;
+            }
             switch (ID) {
                 case ("1"):
                 case ("2"):
@@ -58,17 +64,24 @@
                 case ("8"):
                 case ("9"):
                 case ("0"):
-                case ("."):  
                         currentNum += ID;
                         display.innerHTML = currentNum;
                         thirdNum = "";
+                case ("."):  
+                    if (currentNum.length === 0) {
+                        currentNum += "0."
+                    } else if (decimalCheck === false) {
+                        currentNum += ID;
+                    }
+                    display.innerHTML = currentNum;
+                    thirdNum = "";
+                    decimalCheck = true;    
                     break;
                 case ("+"):
                     if (thirdNum.toString().length > 0) {
                         calcNums.push(thirdNum);
                         thirdNum = "";
                     }
-                    console.log(calcNums);
                     executeOperator(ID, 1);
                     break;
                 case ("-"):
@@ -78,6 +91,7 @@
                     }
                     executeOperator(ID, 2);
                     break; 
+                case ("*"):
                 case ("x"):
                     if (thirdNum.toString().length > 0) {
                         calcNums.push(thirdNum);
@@ -85,6 +99,7 @@
                     }
                     executeOperator(ID, 3);
                     break; 
+                case ("/"):
                 case ("÷"):
                     if (thirdNum.toString().length > 0) {
                         calcNums.push(thirdNum);
@@ -92,6 +107,8 @@
                     }
                     executeOperator(ID, 4);
                     break; 
+                case ("="):
+                case ("Enter"):
                 case ("equalsOperator"):
                     if (currentNum.length > 0) {
                         calcNums.push(currentNum);
@@ -104,6 +121,7 @@
                         } 
                     }
                     break; 
+                case ("Backspace"):
                 case ("deleteOperator"):
                     if (currentNum.length > 1) {    
                         currentNum = currentNum.slice(0, currentNum.length-1);
@@ -164,13 +182,11 @@
                 currentNum = "";
             }
             if (operatorCheck !== 0) {
-                console.log("opt1");
                 calcNums = [mathResults(operatorCheck)];
                 background.innerHTML = calcNums[0];
             }
                 operatorCheck = check;
             if (calcNums.length === 2) {
-                console.log("opt2");
                 calcNums = [mathResults(operatorCheck)];
                 background.innerHTML = calcNums[0];
                 display.innerHTML = 0;
@@ -180,78 +196,7 @@
             } else if (calcNums.length === 0) {
             }
         }
-        window.addEventListener('keydown', keyDown);
-        function keyDown(e) {
-            console.log(e);
-            switch (e.key) {
-                case ("1"):
-                case ("2"):
-                case ("3"):
-                case ("4"):
-                case ("5"):
-                case ("6"):
-                case ("8"):
-                case ("9"):
-                case ("0"):
-                case ("."):  
-                    currentNum += e.key;
-                    display.innerHTML = currentNum;
-                    thirdNum = "";
-                    break;
-                case ("+"):
-                    if (thirdNum.toString().length > 0) {
-                        calcNums.push(thirdNum);
-                        thirdNum = "";
-                    }
-                    console.log(calcNums);
-                    executeOperator("+", 1);
-                    break;
-                case ("-"):
-                    if (thirdNum.toString().length > 0) {
-                        calcNums.push(thirdNum);
-                        thirdNum = "";
-                    }
-                    executeOperator("-", 2);
-                    break; 
-                case ("*"):
-                case ("x"):
-                    if (thirdNum.toString().length > 0) {
-                        calcNums.push(thirdNum);
-                        thirdNum = "";
-                    }
-                    executeOperator("x", 3);
-                    break; 
-                case ("/"):
-                    if (thirdNum.toString().length > 0) {
-                        calcNums.push(thirdNum);
-                        thirdNum = "";
-                    }
-                    executeOperator("÷", 4);
-                    break; 
-                case ("="):
-                case ("Enter"):
-                    if (currentNum.length > 0) {
-                        calcNums.push(currentNum);
-                        currentNum = "";
-                        if (calcNums.length === 2) {
-                            thirdNum = mathResults(operatorCheck);
-                            calcNums = [];
-                            background.innerHTML = "";
-                            display.innerHTML = thirdNum;
-                        } 
-                    }
-                    break; 
-                case ("Backspace"):
-                    if (currentNum.length > 1) {    
-                        currentNum = currentNum.slice(0, currentNum.length-1);
-                        display.innerHTML = currentNum;
-                    } else {
-                        currentNum = "";
-                        display.innerHTML = 0;
-                    }
-                    break;        
-            }
-        }
+        window.addEventListener('keydown', clickButton);
     </script>
 </html>
 
